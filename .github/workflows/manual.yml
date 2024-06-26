@@ -1,0 +1,49 @@
+name: AutoTesting
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: List contents
+        run: ls
+
+      - name: Compile classes
+        run: javac -d ./bin -cp "./testresources/junit-platform-console-standalone-1.9.2.jar" ./src/ST10281928-NDIVHUWONDOU-PROG5121POE/Login.java ./src/ST10281928-NDIVHUWONDOU-PROG5121POE/Task.java ./src/ST10281928-NDIVHUWONDOU-PROG5121POE/StoreData.java ./test/ST10281928-NDIVHUWONDOU-PROG5121POE/LoginTest.java ./test/ST10281928-NDIVHUWONDOU-PROG5121POE/TaskTest.java ./test/ST10281928-NDIVHUWONDOU-PROG5121POE/StoreDataTest.java
+
+      - name: List contents of bin directory after compile
+        run: ls ./bin/ST10281928-NDIVHUWONDOU-PROG5121POE
+
+      # Run LoginTest and create report
+      - name: Run LoginTest and create report
+        run: |
+          ls ./bin
+          java -jar ./testresources/junit-platform-console-standalone-1.9.2.jar -cp ./bin --select-class ST10281928-NDIVHUWONDOU-PROG5121POE.LoginTest
+
+      # Run TaskTest and create report
+      - name: Run TaskTest and create report
+        run: |
+          ls ./bin
+          java -jar ./testresources/junit-platform-console-standalone-1.9.2.jar -cp ./bin --select-class ST10281928-NDIVHUWONDOU-PROG5121POE.TaskTest
+
+ # Run StoreDataTest and create report
+      - name: Run StoreDataTest and create report
+        run: |
+          ls ./bin
+          java -jar ./testresources/junit-platform-console-standalone-1.9.2.jar -cp ./bin --select-class ST10281928-NDIVHUWONDOU-PROG5121POE.StoreDataTest
